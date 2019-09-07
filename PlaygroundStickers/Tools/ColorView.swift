@@ -14,6 +14,7 @@ import UIKit
 protocol colorDelegate {
     func colorTapped(color: UIColor)
     func UISliderColorTapped()
+    func colorOff()
 }
 
 
@@ -45,7 +46,7 @@ class ColorView: UIView {
     fileprivate var currentPage: Int = 0 {
         didSet {
             if currentPage == 0 {
-               
+               self.colorDelegate?.colorOff()
             } else if currentPage == 1{
                  self.colorDelegate?.UISliderColorTapped()
             } else {

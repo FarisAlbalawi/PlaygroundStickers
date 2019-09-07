@@ -1081,7 +1081,7 @@ extension EditorView: PositionsDelegate, scaleViewDelegate {
             activeTextView!.isScrollEnabled = false
         }
       
-            
+        
        
       
     }
@@ -1892,6 +1892,43 @@ extension EditorView: shapeDelegate{
 
 
 extension EditorView: colorDelegate {
+    func colorOff() {
+        switch colorForType {
+        case 0:
+            if activeImage != nil {
+               
+                self.activeImage?.image = activeImage?.image?.withRenderingMode(.alwaysOriginal)
+           
+                
+            }  else if activeTextView != nil {
+                activeTextView!.textColor = UIColor.black
+                
+            }
+        case 1:
+            if activeTextView != nil {
+                activeTextView!.layer.shadowColor = nil
+            } else if  activeImage != nil {
+                activeImage!.layer.shadowColor = nil
+            }
+        case 2:
+            
+            if activeTextView != nil {
+                activeTextView!.layer.backgroundColor = nil
+               
+            }
+        case 3:
+            if activeTextView != nil {
+                activeTextView!.layer.borderColor = nil
+               
+            }
+            
+        case .none:
+            print("a status")
+        case .some(_):
+            print("no status")
+        }
+    }
+    
     
     func UISliderColorTapped() {
         sliderColorVC = UISliderColorVC(nibName: nil, bundle: Bundle(for: UISliderColorVC.self))
