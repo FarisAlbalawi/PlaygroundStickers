@@ -12,7 +12,7 @@ import UIKit
 
 
 protocol scaleViewDelegate {
-    func scaleChanged(value: Float)
+    func scaleChanged(value: CGFloat)
 }
 
 class scaleView: UIView {
@@ -234,10 +234,10 @@ extension scaleView: UICollectionViewDelegate {
         
         if (self.lastContentOffset < scrollView.contentOffset.x) {
             let v = Float(numberOfScrolling) * 0.01
-            self.Delegate?.scaleChanged(value: 1+v)
+            self.Delegate?.scaleChanged(value: CGFloat(1+v))
         } else if (self.lastContentOffset > scrollView.contentOffset.x) {
             let v = Float(numberOfScrolling) * 0.01
-            self.Delegate?.scaleChanged(value: 1-v)
+            self.Delegate?.scaleChanged(value: CGFloat(1-v))
         } else {
             // didn't move
         }

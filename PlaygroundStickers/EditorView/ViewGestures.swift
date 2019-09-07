@@ -142,6 +142,14 @@ extension EditorView: UIGestureRecognizerDelegate {
         return true
     }
     
+    func setCharacterSpacig(string:String) -> NSMutableAttributedString {
+        
+        let attributedStr = NSMutableAttributedString(string: string)
+        attributedStr.addAttribute(NSAttributedString.Key.kern, value: 1.25, range: NSMakeRange(0, attributedStr.length))
+        return attributedStr
+    }
+    
+    
     @objc func scaleEffect(view: UIView) {
     
          hideToolbar(hide: true)
@@ -158,6 +166,9 @@ extension EditorView: UIGestureRecognizerDelegate {
         } else if view is UITextView {
             if let text = view as? UITextView {
                 textEditor(text: text)
+           
+             //  text.setCharacterSpacing(1)
+             
             }
         }
         
@@ -300,4 +311,17 @@ func rotate(view: UIView ,angle: CGFloat) {
     let radians = angle / 180.0 * CGFloat.pi
     let rotation = view.transform.rotated(by: radians)
     view.transform = rotation
+}
+
+
+
+
+
+
+extension UITextView{
+    func setCharacterSpacing(_ spacing: CGFloat){
+        let attributedStr = NSMutableAttributedString(string: self.text ?? "")
+        attributedStr.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSMakeRange(0, attributedStr.length))
+        self.attributedText = attributedStr
+    }
 }

@@ -630,15 +630,7 @@ class EditorView: UIViewController {
         
       
     }
-    
-    func viewSlideInFromTopToBottom(view: UIView) -> Void {
-        let transition:CATransition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-        transition.type = CATransitionType.push
-        transition.subtype = CATransitionSubtype.fromBottom
-        view.layer.add(transition, forKey: kCATransition)
-    }
+
     
     func textEditor(text: UITextView) {
         self.DoneButton.isHidden = false
@@ -1060,25 +1052,34 @@ extension EditorView: TextToolDelegate {
 
 extension EditorView: PositionsDelegate, scaleViewDelegate {
     
-    func scaleChanged(value: Float) {
+    func scaleChanged(value: CGFloat) {
     
-     
+        let maxScale : CGFloat  = 3.0;
+        let minScale : CGFloat  = 0.01;
+        
+        let currentScale = view.frame.width/view.bounds.size.width
+        var newScale = value
+        if currentScale * value < minScale {
+            newScale = minScale / currentScale
+        } else if currentScale * value > maxScale {
+            newScale = maxScale / currentScale
+        }
+        
         if activeView != nil {
-             activeView?.transform = (activeView?.transform.scaledBy(x: CGFloat(value), y: CGFloat(value)))!
+             activeView?.transform = (activeView?.transform.scaledBy(x: newScale, y: newScale))!
         } else if activeTextView != nil {
-            activeTextView!.isScrollEnabled = true
+            self.activeTextView!.isScrollEnabled = true
+            let font = UIFont(name: self.activeTextView!.font!.fontName, size: self.activeTextView!.font!.pointSize*newScale)
+            self.activeTextView!.font = font
             
-            let font = UIFont(name: activeTextView!.font!.fontName, size: activeTextView!.font!.pointSize * CGFloat(value))
-            activeTextView!.font = font
+            let sizeToFit = self.activeTextView!.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
+                                                                     height:CGFloat.greatestFiniteMagnitude))
             
-            let sizeToFit = activeTextView!.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
-                                                                height:CGFloat.greatestFiniteMagnitude))
+            self.activeTextView!.bounds.size = CGSize(width: sizeToFit.width,
+                                                      height: sizeToFit.height)
             
-            activeTextView!.bounds.size = CGSize(width: sizeToFit.width,
-                                                 height: sizeToFit.height)
-            
-            activeTextView!.setNeedsDisplay()
-            activeTextView!.isScrollEnabled = false
+            self.activeTextView!.setNeedsDisplay()
+            self.activeTextView!.isScrollEnabled = false
         }
       
         
@@ -1133,6 +1134,7 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
     func imageToolTapped(index: Int) {
         // Assign final Image
   
+         activeTextView = nil
         self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
         self.scaleViews.collectionView.layoutIfNeeded()
         
@@ -1319,6 +1321,7 @@ extension EditorView: opacityViewDelegate {
 extension EditorView: shapeToolDelegate {
     func shapeToolTapped(index: Int) {
         
+        activeTextView = nil
         self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
         self.scaleViews.collectionView.layoutIfNeeded()
         
@@ -1452,14 +1455,18 @@ extension EditorView: LayersViewDelegate {
     func LayerTapped(index: Int) {
         let indexs =  Array(self.tempImageView.subviews.reversed())
         let view = indexs[index]
+        
+        activeView = view
         if view is UIImageView {
             if let views = view as? UIImageView {
+                activeImage = views
                 print(view.tag)
                 editorType(tag: view.tag, Image: views)
             }
         } else if view is UITextView {
             if let text = view as? UITextView {
                 textEditor(text: text)
+                activeTextView = text
             }
         }
         
