@@ -51,6 +51,7 @@ extension EditorView: UIGestureRecognizerDelegate {
         if let view = recognizer.view {
             lastView = view
             
+           
             let maxScale : CGFloat  = 3.0;
             let minScale : CGFloat  = 0.01;
             

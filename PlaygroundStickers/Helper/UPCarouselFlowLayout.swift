@@ -10,6 +10,8 @@
 import UIKit
 
 
+var Direction = Bool()
+
 public enum UPCarouselFlowLayoutSpacingMode {
     case fixed(spacing: CGFloat)
     case overlap(visibleOffset: CGFloat)
@@ -72,6 +74,8 @@ open class UPCarouselFlowLayout: UICollectionViewFlowLayout {
             let inset = isHorizontal ? xInset : yInset
             self.minimumLineSpacing = inset - fullSizeSideItemOverlap
         }
+        
+   
     }
     
     override open func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -135,5 +139,7 @@ open class UPCarouselFlowLayout: UICollectionViewFlowLayout {
         
         return targetContentOffset
     }
+    
+    
 }
 

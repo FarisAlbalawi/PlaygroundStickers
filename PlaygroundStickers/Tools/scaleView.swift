@@ -11,34 +11,15 @@
 import UIKit
 
 
-
 protocol scaleViewDelegate {
-    func scaleChanged(value: Double)
+    func scaleChanged(value: Float)
 }
 
 class scaleView: UIView {
     
     var Delegate : scaleViewDelegate?
-    
-    private let slider: HorizontalDial = {
-        let slider = HorizontalDial()
-        slider.maximumValue = 3
-        slider.minimumValue = 0.000001
-        slider.value = 0
-        slider.tick = 1
-        slider.centerMarkWidth = 0
-        slider.centerMarkRadius = 0
-        slider.markColor = ButtonColor
-        slider.markWidth = 1
-        slider.markCount = 20
-        slider.enableRange = false
-        slider.centerMarkHeightRatio = 1
-        slider.padding = 14
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.backgroundColor = UIColor.clear
-        
-        return slider
-    }()
+    var collectionView: UICollectionView!
+
     
     
     private let plusButton: UIButton = {
@@ -65,43 +46,116 @@ class scaleView: UIView {
     }()
     
 
+    fileprivate var orientation: UIDeviceOrientation {
+        return UIDevice.current.orientation
+    }
     
     
     private let screenSize = UIScreen.main.bounds.size
     
     
+    var numberOfScrolling: Int = 0
+    var lastContentOffset: CGFloat = 0.0
+    
+    fileprivate var pageSize: CGSize {
+        let layout =  UPCarouselFlowLayout()
+        layout.sideItemAlpha = 0.3
+        layout.sideItemScale = 0.7
+        layout.itemSize = CGSize(width: 40, height: 40)
+        layout.spacingMode = UPCarouselFlowLayoutSpacingMode.fixed(spacing: 10)
+        layout.spacingMode = UPCarouselFlowLayoutSpacingMode.overlap(visibleOffset: 180)
+        layout.scrollDirection = .horizontal
+        self.collectionView!.collectionViewLayout = layout
+        
+        var pageSize = layout.itemSize
+        if layout.scrollDirection == .horizontal {
+            pageSize.width += layout.minimumLineSpacing
+        } else {
+            pageSize.height += layout.minimumLineSpacing
+        }
+        return pageSize
+    }
+    
+
+    
+    fileprivate var currentPage: Int = 0 {
+        didSet {
+            let indexPath = IndexPath(item: currentPage, section: 0)
+            let scrollPosition: UICollectionView.ScrollPosition = orientation.isPortrait ? .centeredHorizontally : .centeredVertically
+            self.collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: true)
+            
+            
+        }
+    }
+    
+    
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        slider.delegate = self
+      
         
     }
+    
+    
+ 
     
     
     //initWithCode to init view from xib or storyboard
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+      
         setupView()
     }
+
     
     private func setupView() {
-        self.addSubview(slider)
-          self.addSubview(plusButton)
-          self.addSubview(minusButton)
+ 
+        
+        let layout = UPCarouselFlowLayout()
+        layout.sideItemAlpha = 0.3
+        layout.sideItemScale = 0.7
+        layout.itemSize = CGSize(width: 40, height: 40)
+        layout.scrollDirection = .horizontal
+        layout.spacingMode = UPCarouselFlowLayoutSpacingMode.fixed(spacing: 10)
+        layout.spacingMode = UPCarouselFlowLayoutSpacingMode.overlap(visibleOffset: 180)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        
+        
+        self.addSubview(collectionView)
+  
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(scaleCell.self, forCellWithReuseIdentifier: "scaleCell")
+        collectionView.backgroundColor = topColor
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.panGestureRecognizer.isEnabled = false
+    
+      
+        
+        
+        self.addSubview(plusButton)
+        self.addSubview(minusButton)
+        // let screenWidth = screenSize.width
         NSLayoutConstraint.activate([
-            slider.leadingAnchor.constraint(equalTo: leadingAnchor),
-            slider.trailingAnchor.constraint(equalTo: trailingAnchor),
-            slider.topAnchor.constraint(equalTo: topAnchor),
-            slider.bottomAnchor.constraint(equalTo: bottomAnchor,constant: 0),
          
-            minusButton.heightAnchor.constraint(equalToConstant: 30),
-            minusButton.widthAnchor.constraint(equalToConstant: 30),
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            
+            minusButton.heightAnchor.constraint(equalToConstant: 35),
+            minusButton.widthAnchor.constraint(equalToConstant: 35),
             minusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             minusButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
             
-            plusButton.heightAnchor.constraint(equalToConstant: 30),
-            plusButton.widthAnchor.constraint(equalToConstant: 30),
+            plusButton.heightAnchor.constraint(equalToConstant: 35),
+            plusButton.widthAnchor.constraint(equalToConstant: 35),
             plusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             plusButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
             
@@ -112,21 +166,131 @@ class scaleView: UIView {
     
     
     @objc func didPressPlusButton() {
+        currentPage += 1
     
+     self.Delegate?.scaleChanged(value: 1+0.01)
     }
     
     @objc func didPressMinusButton() {
-        
+        currentPage -= 1
+         self.Delegate?.scaleChanged(value: 1-0.01)
     }
     
     
 }
 
-extension scaleView: HorizontalDialDelegate {
-    func horizontalDialDidValueChanged(_ horizontalDial: HorizontalDial) {
-        let degrees = horizontalDial.value
-        self.Delegate?.scaleChanged(value: degrees)
+
+extension scaleView: UICollectionViewDataSource {
+
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1000
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "scaleCell", for: indexPath) as? scaleCell
+            else { return UICollectionViewCell() }
         
+
+        cell.layer.backgroundColor = UIColor.clear.cgColor
+        return cell
+    }
+   
+    
+}
+extension scaleView: UICollectionViewDelegate {
+
+    
+    
+  
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print(indexPath.row)
+        self.numberOfScrolling += 1
+      
+    }
+    
+    
+    
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+         lastContentOffset = scrollView.contentOffset.x
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
+        let pageSide = (layout.scrollDirection == .horizontal) ? self.pageSize.width : self.pageSize.height
+        let offset = (layout.scrollDirection == .horizontal) ? scrollView.contentOffset.x : scrollView.contentOffset.y
+        currentPage = Int(floor((offset - pageSide / 2) / pageSide) + 1)
+        let indexPath = IndexPath(item: currentPage, section: 0)
+        
+       
+        let scrollPosition: UICollectionView.ScrollPosition = orientation.isPortrait ? .centeredHorizontally : .centeredVertically
+        self.collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: false)
+        self.collectionView.performBatchUpdates(nil, completion: {
+            (result) in
+            let cell = self.collectionView.cellForItem(at: indexPath)
+            cell?.isSelected = true
+        })
+        
+        if (self.lastContentOffset < scrollView.contentOffset.x) {
+            let v = Float(numberOfScrolling) * 0.01
+            self.Delegate?.scaleChanged(value: 1+v)
+        } else if (self.lastContentOffset > scrollView.contentOffset.x) {
+            let v = Float(numberOfScrolling) * 0.01
+            self.Delegate?.scaleChanged(value: 1-v)
+        } else {
+            // didn't move
+        }
+    
+    
+        collectionView.reloadData()
+        self.numberOfScrolling = 0
+        
+    
+   
+    }
+    
+
+}
+
+
+
+
+class scaleCell: UICollectionViewCell {
+    
+    let lineView: UIView = {
+        let lineView = UIView()
+        lineView.backgroundColor = ButtonColor
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        return lineView
+    }()
+    
+
+
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(lineView)
+      
+        
+        NSLayoutConstraint.activate([
+            
+            lineView.widthAnchor.constraint(equalToConstant: 1),
+            lineView.heightAnchor.constraint(equalToConstant: 30),
+            lineView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            lineView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            ])
         
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+}
+
 }

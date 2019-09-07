@@ -14,7 +14,6 @@
 		642CB6D52307864B004E920A /* LayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB6D42307864B004E920A /* LayersView.swift */; };
 		642CB6FE230B5EE8004E920A /* ShapeTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB6FD230B5EE8004E920A /* ShapeTools.swift */; };
 		642CB700230BAAB2004E920A /* opacityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB6FF230BAAB2004E920A /* opacityView.swift */; };
-		642CB704230BC277004E920A /* HorizontalDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB703230BC277004E920A /* HorizontalDial.swift */; };
 		642CB706230C92CA004E920A /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB705230C92CA004E920A /* helper.swift */; };
 		642CB708230D18C8004E920A /* imageTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB707230D18C8004E920A /* imageTools.swift */; };
 		642CB70F230D2A69004E920A /* FiltersMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642CB70E230D2A69004E920A /* FiltersMenuView.swift */; };
@@ -70,7 +69,6 @@
 		642CB6D42307864B004E920A /* LayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayersView.swift; sourceTree = "<group>"; };
 		642CB6FD230B5EE8004E920A /* ShapeTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeTools.swift; sourceTree = "<group>"; };
 		642CB6FF230BAAB2004E920A /* opacityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = opacityView.swift; sourceTree = "<group>"; };
-		642CB703230BC277004E920A /* HorizontalDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalDial.swift; sourceTree = "<group>"; };
 		642CB705230C92CA004E920A /* helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = helper.swift; sourceTree = "<group>"; };
 		642CB707230D18C8004E920A /* imageTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageTools.swift; sourceTree = "<group>"; };
 		642CB70E230D2A69004E920A /* FiltersMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersMenuView.swift; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 		642CB6C823063756004E920A /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				642CB703230BC277004E920A /* HorizontalDial.swift */,
 				642CB705230C92CA004E920A /* helper.swift */,
 				64606FD923163A36003A4794 /* collectionViewLayout.swift */,
 				64C33273231F267D00179ED5 /* UPCarouselFlowLayout.swift */,
@@ -376,7 +373,6 @@
 				6440555422FD12D600CCE977 /* AppDelegate.swift in Sources */,
 				642CB70F230D2A69004E920A /* FiltersMenuView.swift in Sources */,
 				642CB6CE230781BC004E920A /* UIColor.swift in Sources */,
-				642CB704230BC277004E920A /* HorizontalDial.swift in Sources */,
 				643C63E12322DB400029BD68 /* scaleView.swift in Sources */,
 				64C33274231F267D00179ED5 /* UPCarouselFlowLayout.swift in Sources */,
 				64B93C5822FFFFE700972AB4 /* shapeView.swift in Sources */,

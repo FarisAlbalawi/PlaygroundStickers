@@ -408,6 +408,7 @@ class EditorView: UIViewController {
         TextBackgroundViews.Delegate = self
         cornerRadiusTools.Delegate = self
         cornerRadiusViews.Delegate = self
+        scaleViews.Delegate = self
   
         rotateViews.setup()
         rotateViews.didRotate = {[weak self] angle in
@@ -483,20 +484,23 @@ class EditorView: UIViewController {
             
             if lastView is UITextView {
                 
-                
-                let textView = view as! UITextView
-                textView.isScrollEnabled = true
-                let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize * newScale)
-                textView.font = font
-                
-                let sizeToFit = textView.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
-                                                             height:CGFloat.greatestFiniteMagnitude))
-                
-                textView.bounds.size = CGSize(width: sizeToFit.width,
-                                              height: sizeToFit.height)
-                
-                textView.setNeedsDisplay()
-                textView.isScrollEnabled = false
+                if let textView = lastView as? UITextView {
+                    
+                    textView.isScrollEnabled = true
+                    
+                    let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize * newScale)
+                    textView.font = font
+                    
+                    let sizeToFit = textView.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
+                                                                 height:CGFloat.greatestFiniteMagnitude))
+                    
+                    textView.bounds.size = CGSize(width: sizeToFit.width,
+                                                  height: sizeToFit.height)
+                    
+                    textView.setNeedsDisplay()
+                    textView.isScrollEnabled = false
+                    
+                }
              
             } else {
                 
@@ -898,6 +902,10 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
 extension EditorView: TextToolDelegate {
     func TextToolTapped(index: Int) {
         
+        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
+        self.scaleViews.collectionView.layoutIfNeeded()
+        
+        
         if index == 0 {
             
             self.ColorViewsBottomAnchor.constant = 0
@@ -1034,6 +1042,7 @@ extension EditorView: TextToolDelegate {
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = false
+           
             self.TextBackgroundViews.isHidden = true
             self.cornerRadiusViews.isHidden = true
         }
@@ -1049,7 +1058,36 @@ extension EditorView: TextToolDelegate {
     
 }
 
-extension EditorView: PositionsDelegate {
+extension EditorView: PositionsDelegate, scaleViewDelegate {
+    
+    func scaleChanged(value: Float) {
+    
+     
+        if activeView != nil {
+             activeView?.transform = (activeView?.transform.scaledBy(x: CGFloat(value), y: CGFloat(value)))!
+        } else if activeTextView != nil {
+            activeTextView!.isScrollEnabled = true
+            
+            let font = UIFont(name: activeTextView!.font!.fontName, size: activeTextView!.font!.pointSize * CGFloat(value))
+            activeTextView!.font = font
+            
+            let sizeToFit = activeTextView!.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
+                                                                height:CGFloat.greatestFiniteMagnitude))
+            
+            activeTextView!.bounds.size = CGSize(width: sizeToFit.width,
+                                                 height: sizeToFit.height)
+            
+            activeTextView!.setNeedsDisplay()
+            activeTextView!.isScrollEnabled = false
+        }
+      
+            
+       
+      
+    }
+    
+    
+    
     func ButtonMoved(recognizer: UIPanGestureRecognizer, tag: Int) {
       
         if tag == 0 {
@@ -1095,6 +1133,9 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
     func imageToolTapped(index: Int) {
         // Assign final Image
   
+        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
+        self.scaleViews.collectionView.layoutIfNeeded()
+        
         
         if index == 0 {
             
@@ -1232,7 +1273,10 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
 extension EditorView: rotateViewDelegate {
     func rotateChanged(value: CGFloat) {
         if activeImage != nil {
+         
+            
             let radians = degreesToRadians(Double(value))
+     
             
             let scaleX = activeImage?.transform.scaleX
             let scaleY = activeImage?.transform.scaleY
@@ -1275,6 +1319,9 @@ extension EditorView: opacityViewDelegate {
 extension EditorView: shapeToolDelegate {
     func shapeToolTapped(index: Int) {
         
+        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
+        self.scaleViews.collectionView.layoutIfNeeded()
+        
         if index == 0 {
             
             self.ColorViewsBottomAnchor.constant = 0
@@ -1299,16 +1346,16 @@ extension EditorView: shapeToolDelegate {
              self.scaleViews.isHidden = true
         } else if index == 2 {
             
-                self.ColorViewsBottomAnchor.constant = -50
-                self.colorForType = 1
-                self.EdeiterViewHeight.constant = shadowTool.frame.height
-                self.shadowViews.isHidden = true
-                self.rotateViews.isHidden = true
-                self.opacityViews.isHidden = true
-                self.ColorViews.isHidden = true
-                self.positionsView.isHidden = true
-                self.shadowTool.isHidden = false
-                self.scaleViews.isHidden = true
+            self.ColorViewsBottomAnchor.constant = -50
+            self.colorForType = 1
+            self.EdeiterViewHeight.constant = shadowTool.frame.height
+            self.shadowViews.isHidden = true
+            self.rotateViews.isHidden = true
+            self.opacityViews.isHidden = true
+            self.ColorViews.isHidden = true
+            self.positionsView.isHidden = true
+            self.shadowTool.isHidden = false
+            self.scaleViews.isHidden = true
         } else if index == 3 {
             
             self.EdeiterViewHeight.constant = rotateViews.frame.height
