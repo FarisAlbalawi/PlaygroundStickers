@@ -32,11 +32,12 @@ extension EditorView {
         view.addSubview(LayersViews)
         
       
-    
         
-  
+        view.addSubview(rotateViews)
+        rotateViews.isHidden = true
         
-      
+        
+
         view.addSubview(EdeiterView)
         EdeiterView.isHidden = true
         
@@ -54,16 +55,13 @@ extension EditorView {
         view.addSubview(FiltersView)
         FiltersView.isHidden = true
         
-        view.addSubview(positionsView)
-        positionsView.isHidden = true
-        
-        
-        view.addSubview(rotateViews)
-        rotateViews.isHidden = true
-        
+    
         
         view.addSubview(scaleViews)
         scaleViews.isHidden = true
+        
+        view.addSubview(positionsView)
+        positionsView.isHidden = true
         
         
         view.addSubview(DoneButton)
@@ -79,7 +77,6 @@ extension EditorView {
         view.addSubview(cornerRadiusViews)
         cornerRadiusViews.isHidden = true
 
-        
         
         
         

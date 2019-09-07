@@ -911,7 +911,8 @@ extension EditorView: TextToolDelegate {
             self.shadowViews.isHidden = true
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-             self.scaleViews.isHidden = true
+            self.TextBackgroundViews.isHidden = true
+            self.scaleViews.isHidden = true
             
         } else if index == 1 {
             
@@ -925,8 +926,8 @@ extension EditorView: TextToolDelegate {
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
-            
+            self.scaleViews.isHidden = true
+             self.TextBackgroundViews.isHidden = true
         } else if index == 2 {
             
             self.EdeiterViewHeight.constant = cornerRadiusTools.frame.height
@@ -939,8 +940,8 @@ extension EditorView: TextToolDelegate {
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = false
-             self.scaleViews.isHidden = true
-            
+            self.scaleViews.isHidden = true
+             self.TextBackgroundViews.isHidden = true
             
         } else if index == 3 {
             
@@ -954,8 +955,8 @@ extension EditorView: TextToolDelegate {
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = false
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
-            
+            self.scaleViews.isHidden = true
+             self.TextBackgroundViews.isHidden = true
         } else if index == 4 {
             
             self.ColorViewsBottomAnchor.constant = -50
@@ -970,7 +971,9 @@ extension EditorView: TextToolDelegate {
             self.shadowTool.isHidden = false
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
+            self.cornerRadiusViews.isHidden = true
+            self.scaleViews.isHidden = true
+             self.TextBackgroundViews.isHidden = true
         } else if index == 5 {
             
             self.EdeiterViewHeight.constant = TextAlignmenViews.frame.height
@@ -983,7 +986,9 @@ extension EditorView: TextToolDelegate {
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.TextBackgroundViews.isHidden = true
+            self.cornerRadiusViews.isHidden = true
             
         } else if index == 6 {
             
@@ -997,8 +1002,9 @@ extension EditorView: TextToolDelegate {
             self.FontViews.isHidden = true
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
-            
+            self.scaleViews.isHidden = true
+            self.TextBackgroundViews.isHidden = true
+            self.cornerRadiusViews.isHidden = true
         } else if index == 7 {
             
             self.EdeiterViewHeight.constant = positionsView.frame.height
@@ -1011,7 +1017,10 @@ extension EditorView: TextToolDelegate {
             self.FontViews.isHidden = true
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.TextBackgroundViews.isHidden = true
+            self.cornerRadiusViews.isHidden = true
+            
         } else if index == 8 {
             
             self.EdeiterViewHeight.constant =  self.scaleViews.frame.height
@@ -1025,7 +1034,8 @@ extension EditorView: TextToolDelegate {
             self.textBackgroundTools.isHidden = true
             self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = false
-            
+            self.TextBackgroundViews.isHidden = true
+            self.cornerRadiusViews.isHidden = true
         }
      
         UIView.animate(withDuration: 0.2, animations: {
@@ -1041,7 +1051,7 @@ extension EditorView: TextToolDelegate {
 
 extension EditorView: PositionsDelegate {
     func ButtonMoved(recognizer: UIPanGestureRecognizer, tag: Int) {
-        
+      
         if tag == 0 {
             
             activeView?.center = CGPoint(x: (activeView?.center.x)! + 1 + recognizer.translation(in: tempImageView).x,
@@ -1096,8 +1106,11 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
+            
         } else if index == 1 {
+            
             self.EdeiterViewHeight.constant = MaskViews.frame.height
             self.opacityViews.isHidden = true
             self.FiltersView.isHidden = true
@@ -1106,7 +1119,8 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = false
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
         } else if index == 2 {
             
             self.ColorViewsBottomAnchor.constant = -50
@@ -1118,7 +1132,8 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.positionsView.isHidden = true
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = false
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
             
         } else if index == 3 {
             
@@ -1130,7 +1145,9 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
+            
         } else if index == 4 {
             
             self.EdeiterViewHeight.constant = rotateViews.frame.height
@@ -1141,7 +1158,9 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
+            
         } else if index == 5 {
             
             self.EdeiterViewHeight.constant = positionsView.frame.height
@@ -1152,7 +1171,8 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
+            self.ColorViews.isHidden = true
         } else if index == 6 {
             
             self.EdeiterViewHeight.constant =  self.scaleViews.frame.height
@@ -1163,7 +1183,8 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
             self.MaskViews.isHidden = true
             self.shadowTool.isHidden = true
             self.shadowViews.isHidden = true
-             self.scaleViews.isHidden = false
+            self.scaleViews.isHidden = false
+            self.ColorViews.isHidden = true
         }
         
         
@@ -1265,7 +1286,7 @@ extension EditorView: shapeToolDelegate {
             self.positionsView.isHidden = true
             self.shadowViews.isHidden = true
             self.shadowTool.isHidden = true
-             self.scaleViews.isHidden = true
+            self.scaleViews.isHidden = true
         } else if index == 1 {
             
              self.EdeiterViewHeight.constant = opacityViews.frame.height
