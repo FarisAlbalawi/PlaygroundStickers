@@ -87,7 +87,7 @@ class shadowView: UIView {
         lab.font = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.bold)
         lab.textColor = blueColor
         lab.textAlignment = .center
-        lab.text = "0.0%"
+        lab.text = "300%"
         lab.sizeToFit()
         lab.translatesAutoresizingMaskIntoConstraints = false
         return lab
@@ -109,7 +109,7 @@ class shadowView: UIView {
         lab.font = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.bold)
         lab.textColor = blueColor
         lab.textAlignment = .center
-        lab.text = "0.0%"
+        lab.text = "100.0%"
         lab.sizeToFit()
         lab.translatesAutoresizingMaskIntoConstraints = false
         return lab
@@ -130,7 +130,8 @@ class shadowView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    
+        shadowOffsetWidth.setValue(3.0, animated:true)
+        shadowOpacity.setValue(1.0, animated:true)
     }
     
     //initWithCode to init view from xib or storyboard

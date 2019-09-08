@@ -91,30 +91,29 @@ extension EditorView: UIGestureRecognizerDelegate {
     
     @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
-                scaleEffect(view: view)
+            scaleEffect(view: view)
         }
     }
     
     @objc func tapGesture(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
              lastView = view
-       
-          
-            UIView.animate(withDuration: 0.2,
-                           animations: {
-                            self.addGradientBorder(view: self.lastView!, show: true)
-            },
-                           completion: { _ in
-                            UIView.animate(withDuration: 1) {
-                                self.addGradientBorder(view: self.lastView!, show: false)
-                                
-                            }
-            })
-            
             if #available(iOS 10.0, *) {
                 let generator = UIImpactFeedbackGenerator(style: .heavy)
                 generator.impactOccurred()
             }
+            
+            let previouTransform =  view.transform
+            UIView.animate(withDuration: 0.2,
+                           animations: {
+                            view.transform = view.transform.scaledBy(x: 1.05, y: 1.05)
+            },
+                           completion: { _ in
+                            UIView.animate(withDuration: 0.2) {
+                                view.transform  = previouTransform
+                            }
+            })
+            
         }
     }
     
@@ -175,8 +174,6 @@ extension EditorView: UIGestureRecognizerDelegate {
             if let text = view as? UITextView {
                 textEditor(text: text)
            
-             //  text.setCharacterSpacing(1)
-             
             }
         }
         
@@ -308,20 +305,6 @@ extension EditorView: UIGestureRecognizerDelegate {
     }
     
     
-    func addGradientBorder(view: UIView, show: Bool) {
-        if show == true {
-       
-            view.layer.borderColor = UIColor.yellow.cgColor
-            view.layer.borderWidth = 2.0;
-          
-        } else {
-            view.layer.borderColor = nil
-            view.layer.borderWidth = 0
-            
-        }
-    
-        
-    }
 }
 
 
@@ -350,6 +333,4 @@ extension UITextView{
         self.attributedText = attributedStr
     }
 }
-
-
 

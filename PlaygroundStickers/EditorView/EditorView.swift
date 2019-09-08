@@ -521,7 +521,7 @@ class EditorView: UIViewController {
     @objc func didPressDone() {
         view.endEditing(true)
         hideToolbar(hide: false)
-        self.lastView = nil
+       // self.lastView = nil
         self.TextBackgroundColor = nil
         self.colorForType = nil
         self.activeView = nil
@@ -786,41 +786,44 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
             self.shadowViews.isHidden = true
             self.shadowViewsHeight.constant = 0
             if activeTextView != nil {
-                activeTextView?.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+                activeTextView?.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
                 activeTextView?.layer.shadowOpacity = 1.0
                 activeTextView?.layer.shadowRadius = 0.0
+                activeTextView?.layer.shadowColor = UIColor.clear.cgColor
             } else if activeView != nil {
-                activeView?.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+                activeView?.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
                 activeView?.layer.shadowOpacity = 1.0
                 activeView?.layer.shadowRadius = 0.0
+                activeView?.layer.shadowColor = UIColor.clear.cgColor
             }
             
         } else if Index == 1 {
+            
+            self.EdeiterViewHeight.constant = shadowTool.frame.height + ColorViews.frame.height
+            self.shadowViews.isHidden = true
+            self.ColorViews.isHidden = false
+            self.shadowViewsHeight.constant = 0
+            
+        } else if Index == 2 {
             self.EdeiterViewHeight.constant = shadowTool.frame.height + 80
             self.shadowViews.isHidden = false
             self.ColorViews.isHidden = true
             self.shadowViewsHeight.constant = 80
             self.shadowViews.shadowTypes(.shadowOffset)
-        } else if Index == 2 {
+        } else if Index == 3 {
             self.EdeiterViewHeight.constant = shadowTool.frame.height + 55
             self.shadowViews.shadowTypes(.shadowOpacity)
             self.shadowViews.isHidden = false
             self.ColorViews.isHidden = true
             self.shadowViewsHeight.constant = 55
            
-        } else if Index == 3 {
+        } else if Index == 4 {
               self.EdeiterViewHeight.constant = shadowTool.frame.height + 55
               self.shadowViews.shadowTypes(.shadowRadius)
               self.shadowViews.isHidden = false
               self.ColorViews.isHidden = true
               self.shadowViewsHeight.constant = 55
            
-        } else if Index == 4 {
-              self.EdeiterViewHeight.constant = shadowTool.frame.height + ColorViews.frame.height
-              self.shadowViews.isHidden = true
-              self.ColorViews.isHidden = false
-              self.shadowViewsHeight.constant = 0
-          
         }
         
         UIView.animate(withDuration: 0.2, animations: {
@@ -1580,7 +1583,10 @@ extension EditorView: UITextViewDelegate, FontViewDelegate {
         textView.font =  UIFont.systemFont(ofSize: 40, weight: UIFont.Weight.bold)
        
         textView.textColor = UIColor.black
-        textView.layer.shadowColor = UIColor.black.cgColor
+        textView.layer.shadowColor = UIColor.clear.cgColor
+        textView.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
+        textView.layer.shadowOpacity = 1.0
+        textView.layer.shadowRadius = 0.0
         textView.layer.backgroundColor = UIColor.clear.cgColor
         //
         textView.autocorrectionType = .no
@@ -1743,7 +1749,10 @@ extension EditorView: EmojiDelegate {
         
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowColor = UIColor.clear.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
+        imageView.layer.shadowOpacity = 1.0
+        imageView.layer.shadowRadius = 0.0
         imageView.frame.size = CGSize(width: 150, height: 150)
         imageView.center = tempImageView.center
         
@@ -1794,7 +1803,10 @@ extension EditorView: PhotosDelegate, MaskViewDelegate {
         let img = UIImageView(frame: CGRect(x: 0, y: 0, width: 250, height: 250))
         img.contentMode = .scaleAspectFit
         img.image = image
-        img.layer.shadowColor = UIColor.black.cgColor
+        img.layer.shadowColor = UIColor.clear.cgColor
+        img.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
+        img.layer.shadowOpacity = 1.0
+        img.layer.shadowRadius = 0.0
         img.center = tempImageView.center
         self.tempImageView.addSubview(img)
         //Gestures
@@ -1829,7 +1841,10 @@ extension EditorView: shapeDelegate{
         imageView.contentMode = .scaleAspectFit
         imageView.frame.size = CGSize(width: 150, height: 150)
         imageView.center = tempImageView.center
-        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowColor = UIColor.clear.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
+        imageView.layer.shadowOpacity = 1.0
+        imageView.layer.shadowRadius = 0.0
         self.tempImageView.addSubview(imageView)
         self.LayersViews.LayersArray.insert(imageView, at: 0)
         self.LayersViews.collectionView.reloadData()

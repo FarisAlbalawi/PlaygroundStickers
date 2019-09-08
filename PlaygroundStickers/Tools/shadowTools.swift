@@ -48,7 +48,7 @@ class shadowTools: UIView {
         return UIDevice.current.orientation
     }
     
-    var shadowArray = ["Off","Angle","Opacity","Blur","Color"]
+    var shadowArray = ["Off","Color","Angle","Opacity","Blur"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
