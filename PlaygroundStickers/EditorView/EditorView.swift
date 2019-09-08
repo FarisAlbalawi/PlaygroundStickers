@@ -437,10 +437,25 @@ class EditorView: UIViewController {
                                                selector: #selector(keyboardWillChangeFrame),
                                                name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
-       
+        
+        // Gesture Recognizer for tempImageView
+        let panGesture = UIPanGestureRecognizer(target: self,
+                                                action: #selector(EditorView.panGesture))
+        panGesture.minimumNumberOfTouches = 1
+        panGesture.maximumNumberOfTouches = 1
+        panGesture.delegate = self
+        tempImageView.addGestureRecognizer(panGesture)
+        
         let pinchGesture = UIPinchGestureRecognizer(target: self,
-                                                    action: #selector(EditorView.tempImageViewGesture))
+                                                    action: #selector(EditorView.pinchGesture))
+        pinchGesture.delegate = self
         tempImageView.addGestureRecognizer(pinchGesture)
+        
+        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self,
+                                                                    action:#selector(EditorView.rotationGesture) )
+        rotationGestureRecognizer.delegate = self
+        tempImageView.addGestureRecognizer(rotationGestureRecognizer)
+        
         
         
         
@@ -467,51 +482,7 @@ class EditorView: UIViewController {
         rotateViews.setup(with: config)
     }
     
-    @objc func tempImageViewGesture(_ recognizer: UIPinchGestureRecognizer) {
-        if lastView != nil {
-            
-            
-            let maxScale : CGFloat  = 2.0;
-            let minScale : CGFloat  = 0.1;
-            
-            let currentScale = view.frame.width/view.bounds.size.width
-            var newScale = recognizer.scale
-            if currentScale * recognizer.scale < minScale {
-                newScale = minScale / currentScale
-            } else if currentScale * recognizer.scale > maxScale {
-                newScale = maxScale / currentScale
-            }
-            
-            if lastView is UITextView {
-                
-                if let textView = lastView as? UITextView {
-                    
-                    textView.isScrollEnabled = true
-                    
-                    let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize * newScale)
-                    textView.font = font
-                    
-                    let sizeToFit = textView.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
-                                                                 height:CGFloat.greatestFiniteMagnitude))
-                    
-                    textView.bounds.size = CGSize(width: sizeToFit.width,
-                                                  height: sizeToFit.height)
-                    
-                    textView.setNeedsDisplay()
-                    textView.isScrollEnabled = false
-                    
-                }
-             
-            } else {
-                
-                lastView?.transform = (lastView?.transform.scaledBy(x: newScale, y: newScale))!
-        
-            }
-            recognizer.scale = 1
-        }
-        
-        
-    }
+
     
     
     // Cancel Button
@@ -1434,6 +1405,7 @@ extension EditorView: LayersViewDelegate {
        let indexs =  Array(self.tempImageView.subviews.reversed())
        let view = indexs[index]
        view.removeFromSuperview()
+       self.lastView = nil
     }
     
     

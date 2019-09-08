@@ -15,46 +15,34 @@ extension EditorView: UIGestureRecognizerDelegate {
     func addGestures(view: UIView, tag: Int) {
         view.tag = tag
         view.isUserInteractionEnabled = true
-        let panGesture = UIPanGestureRecognizer(target: self,
-                                                action: #selector(EditorView.panGesture))
-        panGesture.minimumNumberOfTouches = 1
-        panGesture.maximumNumberOfTouches = 1
-        panGesture.delegate = self
-        view.addGestureRecognizer(panGesture)
-        
-        let pinchGesture = UIPinchGestureRecognizer(target: self,
-                                                    action: #selector(EditorView.pinchGesture))
-        pinchGesture.delegate = self
-        view.addGestureRecognizer(pinchGesture)
-        
-        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self,
-                                                                    action:#selector(EditorView.rotationGesture) )
-        rotationGestureRecognizer.delegate = self
-        view.addGestureRecognizer(rotationGestureRecognizer)
-        
+      
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EditorView.tapGesture))
+        tapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGesture)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(EditorView.doubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTap)
+        tapGesture.require(toFail: doubleTap)
         
         
     }
+
     
     //Translation is moving object
     @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
-        if let view = recognizer.view {
-            let viewIndex = tempImageView.subviews.firstIndex(of: view)
-            
-           moveView(view: view, index: viewIndex!, recognizer: recognizer)
+        if lastView != nil {
+            let viewIndex = tempImageView.subviews.firstIndex(of: lastView!)
+            moveView(view: lastView!, index: viewIndex!, recognizer: recognizer)
         }
+     
     }
     
+    
     @objc func pinchGesture(_ recognizer: UIPinchGestureRecognizer) {
-        if let view = recognizer.view {
-            lastView = view
-            
-           
+        if lastView != nil {
             let maxScale : CGFloat  = 3.0;
-            let minScale : CGFloat  = 0.01;
-            
+            let minScale : CGFloat  = 0.1;
             let currentScale = view.frame.width/view.bounds.size.width
             var newScale = recognizer.scale
             if currentScale * recognizer.scale < minScale {
@@ -63,50 +51,70 @@ extension EditorView: UIGestureRecognizerDelegate {
                 newScale = maxScale / currentScale
             }
             
-            if view is UITextView {
+            if lastView is UITextView {
                 
-            
-                let textView = view as! UITextView
-                textView.isScrollEnabled = true
-                let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize * newScale)
-                textView.font = font
+                if let textView = lastView as? UITextView {
+                    textView.isScrollEnabled = true
+                    let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize * newScale)
+                    textView.font = font
+                    let sizeToFit = textView.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
+                                                                 height:CGFloat.greatestFiniteMagnitude))
+                    textView.bounds.size = CGSize(width: sizeToFit.width,
+                                                  height: sizeToFit.height)
+                    textView.setNeedsDisplay()
+                    textView.isScrollEnabled = false
+                    recognizer.scale = 1
+                }
                 
-                let sizeToFit = textView.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
-                                                             height:CGFloat.greatestFiniteMagnitude))
-                
-                textView.bounds.size = CGSize(width: sizeToFit.width,
-                                              height: sizeToFit.height)
-                
-                textView.setNeedsDisplay()
-                textView.isScrollEnabled = false
-    
             } else {
-             
-                view.transform = view.transform.scaledBy(x: newScale, y: newScale)
-                print(recognizer.scale)
-               
-           
                 
+                lastView?.transform = (lastView?.transform.scaledBy(x: newScale, y: newScale))!
+                
+                recognizer.scale = 1
             }
-            recognizer.scale = 1
+            
         }
+        
     }
     
     
     @objc func rotationGesture(_ recognizer: UIRotationGestureRecognizer) {
-        if let view = recognizer.view {
-            view.transform = view.transform.rotated(by: recognizer.rotation)
+        if lastView != nil {
+            lastView!.transform = lastView!.transform.rotated(by: recognizer.rotation)
             recognizer.rotation = 0
-            lastView = view
-            
-            
+        }
+      
+    }
+    
+    
+    
+    
+    @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
+        if let view = recognizer.view {
+                scaleEffect(view: view)
         }
     }
     
     @objc func tapGesture(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
-        
-                scaleEffect(view: view)
+             lastView = view
+       
+          
+            UIView.animate(withDuration: 0.2,
+                           animations: {
+                            self.addGradientBorder(view: self.lastView!, show: true)
+            },
+                           completion: { _ in
+                            UIView.animate(withDuration: 1) {
+                                self.addGradientBorder(view: self.lastView!, show: false)
+                                
+                            }
+            })
+            
+            if #available(iOS 10.0, *) {
+                let generator = UIImpactFeedbackGenerator(style: .heavy)
+                generator.impactOccurred()
+            }
         }
     }
     
@@ -263,6 +271,7 @@ extension EditorView: UIGestureRecognizerDelegate {
             if deleteView.frame.contains(point) { // Delete the view
                 view.removeFromSuperview()
                
+                self.lastView = nil
                 var index_1 = [Int]()
                 for i in 0...self.LayersViews.LayersArray.count - 1 {
                     index_1.append(i)
@@ -297,6 +306,22 @@ extension EditorView: UIGestureRecognizerDelegate {
         }
         return imageviews
     }
+    
+    
+    func addGradientBorder(view: UIView, show: Bool) {
+        if show == true {
+       
+            view.layer.borderColor = UIColor.yellow.cgColor
+            view.layer.borderWidth = 2.0;
+          
+        } else {
+            view.layer.borderColor = nil
+            view.layer.borderWidth = 0
+            
+        }
+    
+        
+    }
 }
 
 
@@ -325,3 +350,6 @@ extension UITextView{
         self.attributedText = attributedStr
     }
 }
+
+
+
