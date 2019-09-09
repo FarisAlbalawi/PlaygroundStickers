@@ -1000,8 +1000,6 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
     }
     
   
-
-    
     
 }
 
@@ -1010,8 +1008,8 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
 extension EditorView: TextToolDelegate {
     func TextToolTapped(index: Int) {
         
-        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
-        self.scaleViews.collectionView.layoutIfNeeded()
+        self.scaleViews.currentPage = 5000
+        self.scaleViews.isScrolled = false
         
         self.CapsViews.isHidden = true
         self.spaceViews.isHidden = true
@@ -1246,10 +1244,9 @@ extension EditorView: imageToolDelegate, FiltersMenuViewDelegate{
         // Assign final Image
   
          activeTextView = nil
-        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
-        self.scaleViews.collectionView.layoutIfNeeded()
-        
-        
+         self.scaleViews.currentPage = 5000
+         self.scaleViews.isScrolled = false
+   
         if index == 0 {
             
             self.EdeiterViewHeight.constant = FiltersView.frame.height
@@ -1433,8 +1430,9 @@ extension EditorView: shapeToolDelegate {
     func shapeToolTapped(index: Int) {
         
         activeTextView = nil
-        self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
-        self.scaleViews.collectionView.layoutIfNeeded()
+        self.scaleViews.currentPage = 5000
+        self.scaleViews.isScrolled = false
+        
         
         if index == 0 {
             

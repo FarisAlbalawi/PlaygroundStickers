@@ -46,7 +46,7 @@ class scaleView: UIView {
     }()
     
 
-    fileprivate var orientation: UIDeviceOrientation {
+     var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
@@ -56,6 +56,7 @@ class scaleView: UIView {
     
     var numberOfScrolling: Int = 0
     var lastContentOffset: CGFloat = 0.0
+    var isScrolled = false
     
     fileprivate var pageSize: CGSize {
         let layout =  UPCarouselFlowLayout()
@@ -78,7 +79,7 @@ class scaleView: UIView {
     
 
     
-    fileprivate var currentPage: Int = 0 {
+     var currentPage: Int = 5000 {
         didSet {
             let indexPath = IndexPath(item: currentPage, section: 0)
             let scrollPosition: UICollectionView.ScrollPosition = orientation.isPortrait ? .centeredHorizontally : .centeredVertically
@@ -166,14 +167,17 @@ class scaleView: UIView {
     
     
     @objc func didPressPlusButton() {
-        currentPage += 1
-    
+     currentPage += 1
+     self.isScrolled = true
+     self.numberOfScrolling = 1
      self.Delegate?.scaleChanged(value: 1+0.01)
     }
     
     @objc func didPressMinusButton() {
         currentPage -= 1
-         self.Delegate?.scaleChanged(value: 1-0.01)
+        self.numberOfScrolling = 1
+        self.isScrolled = true
+        self.Delegate?.scaleChanged(value: 1-0.01)
     }
     
     
@@ -184,7 +188,7 @@ extension scaleView: UICollectionViewDataSource {
 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1000
+        return 10000
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -204,8 +208,12 @@ extension scaleView: UICollectionViewDelegate {
     
   
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print(indexPath.row)
-        self.numberOfScrolling += 1
+        if isScrolled {
+              self.numberOfScrolling += 1
+        } else {
+             self.numberOfScrolling = 0
+        }
+      
       
     }
     
@@ -245,6 +253,7 @@ extension scaleView: UICollectionViewDelegate {
     
         collectionView.reloadData()
         self.numberOfScrolling = 0
+        self.isScrolled = true
         
     
    
