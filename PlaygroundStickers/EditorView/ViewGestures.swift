@@ -13,6 +13,7 @@ extension EditorView: UIGestureRecognizerDelegate {
     
     //Gestures
     func addGestures(view: UIView, tag: Int) {
+        self.lastView = view
         view.tag = tag
         view.isUserInteractionEnabled = true
       
@@ -98,6 +99,16 @@ extension EditorView: UIGestureRecognizerDelegate {
     @objc func tapGesture(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
              lastView = view
+            if view is UITextView {
+                let text = view as! UITextView
+              
+               // text.text = text.text?.uppercased()
+                
+             //    text.text = text.text?.capitalized
+                text.text = text.text?.lowercased()
+          
+            }
+            
             if #available(iOS 10.0, *) {
                 let generator = UIImpactFeedbackGenerator(style: .heavy)
                 generator.impactOccurred()
@@ -323,14 +334,4 @@ func rotate(view: UIView ,angle: CGFloat) {
 
 
 
-
-
-
-extension UITextView{
-    func setCharacterSpacing(_ spacing: CGFloat){
-        let attributedStr = NSMutableAttributedString(string: self.text ?? "")
-        attributedStr.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSMakeRange(0, attributedStr.length))
-        self.attributedText = attributedStr
-    }
-}
 

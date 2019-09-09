@@ -55,7 +55,11 @@ extension EditorView {
         view.addSubview(FiltersView)
         FiltersView.isHidden = true
         
-    
+        view.addSubview(textStylesTools)
+        textStylesTools.isHidden = true
+        
+        
+        
         
         view.addSubview(scaleViews)
         scaleViews.isHidden = true
@@ -73,6 +77,14 @@ extension EditorView {
         view.addSubview(TextAlignmenViews)
         TextAlignmenViews.isHidden = true
 
+        view.addSubview(CapsViews)
+        CapsViews.isHidden = true
+        
+        
+        view.addSubview(spaceViews)
+        spaceViews.isHidden = true
+
+        
         
         view.addSubview(cornerRadiusViews)
         cornerRadiusViews.isHidden = true
@@ -142,10 +154,22 @@ extension EditorView {
             ColorViews.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
             ColorViewsBottomAnchor,
             
-            // ColorView layout
+           
             TextAlignmenViews.heightAnchor.constraint(equalToConstant: 60),
             TextAlignmenViews.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
-            TextAlignmenViews.bottomAnchor.constraint(equalTo: TextTools.topAnchor),
+            TextAlignmenViews.bottomAnchor.constraint(equalTo: textStylesTools.topAnchor),
+            
+            CapsViews.heightAnchor.constraint(equalToConstant: 60),
+            CapsViews.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
+            CapsViews.bottomAnchor.constraint(equalTo: textStylesTools.topAnchor),
+            
+            
+            
+            
+            spaceViews.heightAnchor.constraint(equalToConstant: 55),
+            spaceViews.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
+            spaceViews.bottomAnchor.constraint(equalTo: textStylesTools.topAnchor),
+            
             
             
             shadowViewsHeight,
@@ -157,7 +181,12 @@ extension EditorView {
             shadowTool.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
             shadowTool.bottomAnchor.constraint(equalTo: shapeTools.topAnchor),
             
+            textStylesTools.heightAnchor.constraint(equalToConstant: 50),
+            textStylesTools.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
+            textStylesTools.bottomAnchor.constraint(equalTo: TextTools.topAnchor),
+            
 
+            
             
             FontViews.heightAnchor.constraint(equalToConstant: 60),
             FontViews.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),

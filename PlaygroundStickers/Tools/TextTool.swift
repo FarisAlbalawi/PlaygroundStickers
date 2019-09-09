@@ -18,7 +18,7 @@ class TextTool: UIView {
     var collectionView: UICollectionView!
     var Delegate : TextToolDelegate?
     
-    var ToolsArray = ["color","Tfont","textRound","TbackgroundColor","shadow","centerAlignment","rotate","size","size2"]
+    var ToolsArray = ["color","Tfont","textStyle","textRound","TbackgroundColor","shadow","rotate","size","size2"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)

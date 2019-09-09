@@ -59,6 +59,9 @@
 		64C33274231F267D00179ED5 /* UPCarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C33273231F267D00179ED5 /* UPCarouselFlowLayout.swift */; };
 		64CA113723178B6D009B383D /* CropPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CA113623178B6D009B383D /* CropPickerView.swift */; };
 		64CA113923178C2D009B383D /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CA113823178C2D009B383D /* CropViewController.swift */; };
+		64EEAA8B2325E14700B7E1AF /* textStylesTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8A2325E14700B7E1AF /* textStylesTool.swift */; };
+		64EEAA8D2325EC0400B7E1AF /* spaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8C2325EC0400B7E1AF /* spaceView.swift */; };
+		64EEAA8F2326004A00B7E1AF /* CapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8E2326004A00B7E1AF /* CapsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +119,9 @@
 		64C33273231F267D00179ED5 /* UPCarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UPCarouselFlowLayout.swift; sourceTree = "<group>"; };
 		64CA113623178B6D009B383D /* CropPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropPickerView.swift; sourceTree = "<group>"; };
 		64CA113823178C2D009B383D /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
+		64EEAA8A2325E14700B7E1AF /* textStylesTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = textStylesTool.swift; sourceTree = "<group>"; };
+		64EEAA8C2325EC0400B7E1AF /* spaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spaceView.swift; sourceTree = "<group>"; };
+		64EEAA8E2326004A00B7E1AF /* CapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +172,9 @@
 				643C63DA2322163B0029BD68 /* cornerRadiusTool.swift */,
 				643C63DC232217AB0029BD68 /* cornerRadiusView.swift */,
 				643C63E02322DB400029BD68 /* scaleView.swift */,
+				64EEAA8A2325E14700B7E1AF /* textStylesTool.swift */,
+				64EEAA8C2325EC0400B7E1AF /* spaceView.swift */,
+				64EEAA8E2326004A00B7E1AF /* CapsView.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -347,6 +356,7 @@
 				642CB73D23123493004E920A /* TextAlignmenView.swift in Sources */,
 				643C63DD232217AB0029BD68 /* cornerRadiusView.swift in Sources */,
 				643C63D72320C4300029BD68 /* textBackgroundTool.swift in Sources */,
+				64EEAA8F2326004A00B7E1AF /* CapsView.swift in Sources */,
 				64B93C4122FE0EC400972AB4 /* EditorView.swift in Sources */,
 				642CB7452314E02B004E920A /* shadowTools.swift in Sources */,
 				642CB7472314EC8F004E920A /* ColorView.swift in Sources */,
@@ -354,6 +364,7 @@
 				642CB73F231239F5004E920A /* shadowView.swift in Sources */,
 				64B93C5122FE3D2F00972AB4 /* UIView+Image.swift in Sources */,
 				64B93C4622FE176600972AB4 /* BottomToolView.swift in Sources */,
+				64EEAA8B2325E14700B7E1AF /* textStylesTool.swift in Sources */,
 				6440555622FD12D600CCE977 /* ViewController.swift in Sources */,
 				642CB6FE230B5EE8004E920A /* ShapeTools.swift in Sources */,
 				642CB700230BAAB2004E920A /* opacityView.swift in Sources */,
@@ -373,6 +384,7 @@
 				6440555422FD12D600CCE977 /* AppDelegate.swift in Sources */,
 				642CB70F230D2A69004E920A /* FiltersMenuView.swift in Sources */,
 				642CB6CE230781BC004E920A /* UIColor.swift in Sources */,
+				64EEAA8D2325EC0400B7E1AF /* spaceView.swift in Sources */,
 				643C63E12322DB400029BD68 /* scaleView.swift in Sources */,
 				64C33274231F267D00179ED5 /* UPCarouselFlowLayout.swift in Sources */,
 				64B93C5822FFFFE700972AB4 /* shapeView.swift in Sources */,
