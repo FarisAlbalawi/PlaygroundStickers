@@ -289,10 +289,29 @@ class spaceViewCell: UICollectionViewCell {
 
 
 
-extension UITextView{
-    func setCharacterSpacing(_ spacing: CGFloat){
-        let attributedStr = NSMutableAttributedString(string: self.text ?? "")
-        attributedStr.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSMakeRange(0, attributedStr.length))
-        self.attributedText = attributedStr
+extension UITextView {
+    func addCharacterSpacing(_ spacing: CGFloat) {
+        if let Text = text, Text.count > 0 {
+            let attributedString = NSMutableAttributedString(string: Text)
+            attributedString.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSRange(location: 0, length: attributedString.length - 1))
+            attributedText = attributedString
+        }
     }
 }
+
+//extension UITextView{
+//    func setCharacterSpacing(_ spacing: CGFloat){
+//        let attributedStr = NSMutableAttributedString(string: self.text ?? "")
+//        attributedStr.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSMakeRange(0, attributedStr.length))
+//        self.attributedText = attributedStr
+//    }
+//}
+//
+//extension UITextView{
+//    func addTextSpacing(_ spacing: CGFloat){
+//        let attributedString = NSMutableAttributedString(string: text!)
+//        attributedString.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSRange(location: 0, length: text!.count))
+//        attributedString.addAttribute(NSAttributedString.Key(rawValue: "\(String(describing: self.font?.lineHeight))"), value: 50, range: NSRange(location: 0, length: text!.count))
+//        attributedText = attributedString
+//    }
+//}

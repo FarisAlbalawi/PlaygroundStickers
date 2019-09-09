@@ -99,16 +99,7 @@ extension EditorView: UIGestureRecognizerDelegate {
     @objc func tapGesture(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
              lastView = view
-            if view is UITextView {
-                let text = view as! UITextView
-              
-               // text.text = text.text?.uppercased()
-                
-             //    text.text = text.text?.capitalized
-                text.text = text.text?.lowercased()
-          
-            }
-            
+        
             if #available(iOS 10.0, *) {
                 let generator = UIImpactFeedbackGenerator(style: .heavy)
                 generator.impactOccurred()

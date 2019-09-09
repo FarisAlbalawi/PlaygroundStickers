@@ -399,7 +399,8 @@ class EditorView: UIViewController {
     var activeView: UIView?
     var textIndex: Int?
     var lastView: UIView?
-    var spaceValue: CGFloat?
+    var spaceValueLine: CGFloat?
+    var spaceValueBettwen: CGFloat?
     var orientation: Config.Orientation = .normal
     
     
@@ -686,14 +687,34 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
     func CapsViewTapped(index: Int) {
         if activeTextView != nil {
             if index == 0 {
-                
+                 activeTextView!.text = activeTextView!.text?.capitalized
             } else if index == 1 {
-                
+                activeTextView!.text = activeTextView!.text?.uppercased()
             } else if index == 2 {
-                
+                activeTextView!.text = activeTextView!.text?.lowercased()
+            }
+            
+            if spaceValueBettwen != nil {
+                 activeTextView?.addCharacterSpacing(spaceValueBettwen!)
+            }
+            
+            if spaceValueLine != nil {
+                activeTextView?.layoutManager.delegate = self
             }
             
             
+            self.activeTextView!.isScrollEnabled = true
+            let font = UIFont(name: self.activeTextView!.font!.fontName, size: self.activeTextView!.font!.pointSize)
+            self.activeTextView!.font = font
+            
+            let sizeToFit = self.activeTextView!.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
+                                                                     height:CGFloat.greatestFiniteMagnitude))
+            
+            self.activeTextView!.bounds.size = CGSize(width: sizeToFit.width,
+                                                      height: sizeToFit.height)
+            
+            self.activeTextView!.setNeedsDisplay()
+            self.activeTextView!.isScrollEnabled = false
             
         }
     }
@@ -702,11 +723,12 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
     
     func spaceValueChanged(value: CGFloat, type: Bool) {
         if type == true {
-            activeTextView?.setCharacterSpacing(value)
-            
-           
+            activeTextView?.addCharacterSpacing(value)
+          
+             spaceValueBettwen = value
+        
         } else {
-             spaceValue = value
+            spaceValueLine = value
             activeTextView?.layoutManager.delegate = self
            
         }
@@ -727,8 +749,10 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
         
     }
     
+
+    
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
-        return spaceValue!
+        return spaceValueLine!
     }
     
   
@@ -739,14 +763,17 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
             self.EdeiterViewHeight.constant = textStylesTools.frame.height + TextAlignmenViews.frame.height
             self.TextAlignmenViews.isHidden = false
             self.spaceViews.isHidden = true
+            self.CapsViews.isHidden = true
         } else if Index == 1 {
              self.EdeiterViewHeight.constant = textStylesTools.frame.height + spaceViews.frame.height
              self.TextAlignmenViews.isHidden = true
              self.spaceViews.isHidden = false
+              self.CapsViews.isHidden = true
         } else if Index == 2 {
-            self.EdeiterViewHeight.constant = textStylesTools.frame.height
+            self.EdeiterViewHeight.constant = textStylesTools.frame.height + CapsViews.frame.height
             self.TextAlignmenViews.isHidden = true
             self.spaceViews.isHidden = true
+            self.CapsViews.isHidden = false
         }
         
         UIView.animate(withDuration: 0.2, animations: {
@@ -986,7 +1013,13 @@ extension EditorView: TextToolDelegate {
         self.scaleViews.collectionView.scrollToItem(at:IndexPath(item: 500, section: 0), at: .right, animated: false)
         self.scaleViews.collectionView.layoutIfNeeded()
         
-        
+        self.CapsViews.isHidden = true
+        self.spaceViews.isHidden = true
+        self.TextAlignmenViews.isHidden = true
+        self.shadowViews.isHidden = true
+        self.TextBackgroundViews.isHidden = true
+        self.cornerRadiusViews.isHidden = true
+      
         if index == 0 {
             
             self.ColorViewsBottomAnchor.constant = 0
@@ -996,98 +1029,84 @@ extension EditorView: TextToolDelegate {
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
             self.FontViews.isHidden = true
-            self.TextAlignmenViews.isHidden = true
-            self.shadowViews.isHidden = true
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.TextBackgroundViews.isHidden = true
             self.scaleViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
             
         } else if index == 1 {
             
             self.EdeiterViewHeight.constant = FontViews.frame.height
-            self.FontViews.isHidden = false
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
+            self.FontViews.isHidden = false
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-        
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
         } else if index == 2 {
             
             self.EdeiterViewHeight.constant = textStylesTools.frame.height
-            self.FontViews.isHidden = true
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = false
-            self.shadowViews.isHidden = true
+            self.FontViews.isHidden = true
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-        
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = false
+            
             
         } else if index == 3 {
             
             self.EdeiterViewHeight.constant = cornerRadiusTools.frame.height
-            self.FontViews.isHidden = true
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
+            self.FontViews.isHidden = true
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = false
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
+            self.cornerRadiusTools.isHidden = false
+            self.textStylesTools.isHidden = true
+        
             
         } else if index == 4 {
             
             self.EdeiterViewHeight.constant = textBackgroundTools.frame.height
-            self.FontViews.isHidden = true
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
+            self.FontViews.isHidden = true
             self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = false
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
             
         } else if index == 5 {
             
             self.ColorViewsBottomAnchor.constant = -50
             self.colorForType = 1
-            self.FontViews.isHidden = true
             self.EdeiterViewHeight.constant = shadowTool.frame.height
+            
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
+            self.FontViews.isHidden = true
             self.shadowTool.isHidden = false
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
-            self.cornerRadiusViews.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-      
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
+            
             
         } else if index == 6 {
             
@@ -1095,32 +1114,26 @@ extension EditorView: TextToolDelegate {
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = false
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
-            self.shadowTool.isHidden = true
             self.FontViews.isHidden = true
+            self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-           
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
         } else if index == 7 {
             
             self.EdeiterViewHeight.constant = positionsView.frame.height
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = false
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
-            self.shadowTool.isHidden = true
             self.FontViews.isHidden = true
+            self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = true
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-         
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
             
         } else if index == 8 {
             
@@ -1128,19 +1141,15 @@ extension EditorView: TextToolDelegate {
             self.ColorViews.isHidden = true
             self.rotateViews.isHidden = true
             self.positionsView.isHidden = true
-            self.textStylesTools.isHidden = true
-            self.shadowViews.isHidden = true
-            self.shadowTool.isHidden = true
             self.FontViews.isHidden = true
+            self.shadowTool.isHidden = true
             self.textBackgroundTools.isHidden = true
-            self.cornerRadiusTools.isHidden = true
             self.scaleViews.isHidden = false
-           
-            self.TextBackgroundViews.isHidden = true
-            self.cornerRadiusViews.isHidden = true
-         
+            self.cornerRadiusTools.isHidden = true
+            self.textStylesTools.isHidden = true
+            
         }
-     
+        
         UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded()
         }, completion: {finished in })
