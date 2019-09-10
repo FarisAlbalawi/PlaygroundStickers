@@ -62,6 +62,10 @@
 		64EEAA8B2325E14700B7E1AF /* textStylesTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8A2325E14700B7E1AF /* textStylesTool.swift */; };
 		64EEAA8D2325EC0400B7E1AF /* spaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8C2325EC0400B7E1AF /* spaceView.swift */; };
 		64EEAA8F2326004A00B7E1AF /* CapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAA8E2326004A00B7E1AF /* CapsView.swift */; };
+		64EEAAB62326CE3700B7E1AF /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAAB52326CE3700B7E1AF /* Stroke.swift */; };
+		64EEAAB82326CE5400B7E1AF /* StrokeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAAB72326CE5400B7E1AF /* StrokeSettings.swift */; };
+		64EEAABA2326CE6F00B7E1AF /* TouchDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAAB92326CE6F00B7E1AF /* TouchDrawView.swift */; };
+		64EEAABC2326F94600B7E1AF /* DrwingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EEAABB2326F94600B7E1AF /* DrwingTools.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,6 +126,10 @@
 		64EEAA8A2325E14700B7E1AF /* textStylesTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = textStylesTool.swift; sourceTree = "<group>"; };
 		64EEAA8C2325EC0400B7E1AF /* spaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spaceView.swift; sourceTree = "<group>"; };
 		64EEAA8E2326004A00B7E1AF /* CapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsView.swift; sourceTree = "<group>"; };
+		64EEAAB52326CE3700B7E1AF /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
+		64EEAAB72326CE5400B7E1AF /* StrokeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeSettings.swift; sourceTree = "<group>"; };
+		64EEAAB92326CE6F00B7E1AF /* TouchDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDrawView.swift; sourceTree = "<group>"; };
+		64EEAABB2326F94600B7E1AF /* DrwingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrwingTools.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +157,7 @@
 		642CB6FC230B5E90004E920A /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				64EEAAB42326CD6C00B7E1AF /* DrwingView */,
 				64B93C4822FE35D400972AB4 /* PhotoGallery */,
 				6413F99623198FFB00685636 /* EmojisVC.swift */,
 				642CB6C623052DDF004E920A /* UISliderColorVC.swift */,
@@ -270,6 +279,17 @@
 			path = CropImage;
 			sourceTree = "<group>";
 		};
+		64EEAAB42326CD6C00B7E1AF /* DrwingView */ = {
+			isa = PBXGroup;
+			children = (
+				64EEAAB52326CE3700B7E1AF /* Stroke.swift */,
+				64EEAAB72326CE5400B7E1AF /* StrokeSettings.swift */,
+				64EEAAB92326CE6F00B7E1AF /* TouchDrawView.swift */,
+				64EEAABB2326F94600B7E1AF /* DrwingTools.swift */,
+			);
+			path = DrwingView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -353,7 +373,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64EEAABC2326F94600B7E1AF /* DrwingTools.swift in Sources */,
 				642CB73D23123493004E920A /* TextAlignmenView.swift in Sources */,
+				64EEAAB62326CE3700B7E1AF /* Stroke.swift in Sources */,
 				643C63DD232217AB0029BD68 /* cornerRadiusView.swift in Sources */,
 				643C63D72320C4300029BD68 /* textBackgroundTool.swift in Sources */,
 				64EEAA8F2326004A00B7E1AF /* CapsView.swift in Sources */,
@@ -364,6 +386,7 @@
 				642CB73F231239F5004E920A /* shadowView.swift in Sources */,
 				64B93C5122FE3D2F00972AB4 /* UIView+Image.swift in Sources */,
 				64B93C4622FE176600972AB4 /* BottomToolView.swift in Sources */,
+				64EEAAB82326CE5400B7E1AF /* StrokeSettings.swift in Sources */,
 				64EEAA8B2325E14700B7E1AF /* textStylesTool.swift in Sources */,
 				6440555622FD12D600CCE977 /* ViewController.swift in Sources */,
 				642CB6FE230B5EE8004E920A /* ShapeTools.swift in Sources */,
@@ -390,6 +413,7 @@
 				64B93C5822FFFFE700972AB4 /* shapeView.swift in Sources */,
 				64CA113723178B6D009B383D /* CropPickerView.swift in Sources */,
 				642CB6C723052DDF004E920A /* UISliderColorVC.swift in Sources */,
+				64EEAABA2326CE6F00B7E1AF /* TouchDrawView.swift in Sources */,
 				643C63D92320CE7E0029BD68 /* TextBackgroundView.swift in Sources */,
 				64B93C4F22FE3D1C00972AB4 /* UIImageViewExtenstions.swift in Sources */,
 				642CB706230C92CA004E920A /* helper.swift in Sources */,

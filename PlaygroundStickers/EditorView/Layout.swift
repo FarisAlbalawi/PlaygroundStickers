@@ -30,7 +30,6 @@ extension EditorView {
         view.addSubview(TopView)
         view.addSubview(BottomView)
         view.addSubview(LayersViews)
-        
       
         
         view.addSubview(rotateViews)
@@ -118,12 +117,14 @@ extension EditorView {
         view.addSubview(cornerRadiusTools)
         cornerRadiusTools.isHidden = true
         
+        view.addSubview(DrwingTool)
+        self.DrwingTool.isHidden = true
         
         
     
         view.addSubview(CanvasView)
         CanvasView.addSubview(tempImageView)
-        
+    
         
         CanvasView.addSubview(LineX)
         CanvasView.addSubview(LineY)
@@ -251,6 +252,11 @@ extension EditorView {
             
             
             
+            DrwingTool.heightAnchor.constraint(equalToConstant: 140),
+            DrwingTool.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
+            DrwingTool.bottomAnchor.constraint(equalTo: LayersViews.topAnchor),
+            
+            
             shapeTools.heightAnchor.constraint(equalToConstant: 70),
             shapeTools.widthAnchor.constraint(equalToConstant: self.view.frame.size.width),
             shapeTools.bottomAnchor.constraint(equalTo: LayersViews.topAnchor),
@@ -299,6 +305,8 @@ extension EditorView {
             tempImageView.trailingAnchor.constraint(equalTo: CanvasView.trailingAnchor),
             tempImageView.bottomAnchor.constraint(equalTo: CanvasView.bottomAnchor),
             tempImageView.topAnchor.constraint(equalTo: CanvasView.topAnchor),
+           
+            
             
             //  LineX and LineY layout
             LineX.heightAnchor.constraint(equalToConstant: 1),

@@ -89,6 +89,7 @@ class changePositionsView: UIView, UIGestureRecognizerDelegate{
     }
     
     
+    
     //initWithCode to init view from xib or storyboard
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -105,7 +106,7 @@ class changePositionsView: UIView, UIGestureRecognizerDelegate{
         
         views.isUserInteractionEnabled = true
         let panGesture = UIPanGestureRecognizer(target: self,
-                                                action: #selector(EditorView.panGesture))
+                                                action: #selector(changePositionsView.panGesture))
        
         panGesture.delegate = self
         views.addGestureRecognizer(panGesture)

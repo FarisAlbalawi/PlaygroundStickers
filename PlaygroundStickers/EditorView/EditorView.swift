@@ -213,10 +213,17 @@ class EditorView: UIViewController {
         return CapsViews
     }()
     
+    let DrwingTool: DrwingTools = {
+        let DrwingTool = DrwingTools()
+        DrwingTool.translatesAutoresizingMaskIntoConstraints = false
+        DrwingTool.backgroundColor = barColor
+        return DrwingTool
+    }()
     
     
     
-  
+  //  var TouchDrawViews = TouchDrawView()
+    
     
     let CanvasView: UIView = {
         let CanvasView = UIView()
@@ -252,8 +259,12 @@ class EditorView: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .clear
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
+    
+    
+    
     
     
     let LineX: UIView = {
@@ -403,6 +414,10 @@ class EditorView: UIViewController {
     var spaceValueBettwen: CGFloat?
     var orientation: Config.Orientation = .normal
     
+    var panGesture = UIPanGestureRecognizer()
+    var pinchGesture = UIPinchGestureRecognizer()
+    var rotationGesture = UIRotationGestureRecognizer()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -470,27 +485,28 @@ class EditorView: UIViewController {
         
         
         // Gesture Recognizer for tempImageView
-        let panGesture = UIPanGestureRecognizer(target: self,
-                                                action: #selector(EditorView.panGesture))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesture(recognizer:)))
         panGesture.minimumNumberOfTouches = 1
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         tempImageView.addGestureRecognizer(panGesture)
         
-        let pinchGesture = UIPinchGestureRecognizer(target: self,
-                                                    action: #selector(EditorView.pinchGesture))
+         pinchGesture = UIPinchGestureRecognizer(target: self,
+                                                    action: #selector(self.pinchGesture(recognizer:)))
         pinchGesture.delegate = self
         tempImageView.addGestureRecognizer(pinchGesture)
         
-        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self,
-                                                                    action:#selector(EditorView.rotationGesture) )
-        rotationGestureRecognizer.delegate = self
-        tempImageView.addGestureRecognizer(rotationGestureRecognizer)
+        rotationGesture = UIRotationGestureRecognizer(target: self,
+                                                                    action:#selector(self.rotationGesture(recognizer:)))
+        rotationGesture.delegate = self
+        tempImageView.addGestureRecognizer(rotationGesture)
         
         
         
         
     }
+    
+  
     
     override func viewDidAppear(_ animated: Bool) {
         var config = Config()
@@ -549,15 +565,58 @@ class EditorView: UIViewController {
     }
     
     
+    func convertCIImageToCGImage(inputImage: CIImage) -> CGImage? {
+        let context = CIContext(options: nil)
+        if let cgImage = context.createCGImage(inputImage, from: inputImage.extent) {
+            return cgImage
+        }
+        return nil
+    }
+    
+    
     @objc func didPressDone() {
         view.endEditing(true)
         hideToolbar(hide: false)
        // self.lastView = nil
+        
+        if isDrawing {
+            
+            let imge = self.DrwingTool.drawView!.toImage()
+            let image = imge.cropAlpha()
+            let heightInPoints = image.size.height
+           
+            let widthInPoints = image.size.width
+           
+            let imageView = UIImageView()
+            imageView.image = image
+            imageView.frame.size = CGSize(width: widthInPoints, height: heightInPoints)
+            imageView.center = tempImageView.center
+            
+            
+            
+            let lastView = self.tempImageView.subviews[self.tempImageView.subviews.count-1];
+            lastView.removeFromSuperview()
+            
+            self.tempImageView.addSubview(imageView)
+            self.LayersViews.LayersArray.insert(imageView, at: 0)
+            self.LayersViews.collectionView.reloadData()
+            addGestures(view: imageView, tag: 4)
+          
+          
+            
+            isDrawing = false
+        }
+        
+        
+        self.panGesture.isEnabled = true
+        self.pinchGesture.isEnabled = true
+        self.rotationGesture.isEnabled = true
+        
         self.TextBackgroundColor = nil
         self.colorForType = nil
         self.activeView = nil
         self.activeImage = nil
-        
+        isDrawing = false
         self.EdeiterViewHeight.constant = 0
         self.tempImageView.isUserInteractionEnabled = true
         self.DoneButton.isHidden = true
@@ -577,6 +636,7 @@ class EditorView: UIViewController {
         self.textStylesTools.isHidden = true
         self.CapsViews.isHidden = true
         self.spaceViews.isHidden = true
+        self.DrwingTool.isHidden = true
         
         self.textBackgroundTools.isHidden = true
         self.TextBackgroundViews.isHidden = true
@@ -1669,6 +1729,7 @@ extension EditorView: UITextViewDelegate, FontViewDelegate {
             if let index = self.LayersViews.LayersArray.firstIndex(of: textView) {
                 self.LayersViews.LayersArray.remove(at: index)
                 self.LayersViews.collectionView.reloadData()
+                self.lastView = nil
             }
             
         } else {
@@ -1766,11 +1827,10 @@ extension EditorView: BottomToolDelegate {
         } else if index == 6 {
             
         } else if index == 7 {
-            
+            print("Drwing")
+            showDrwing()
+        } else if index == 8 {
             Restart()
-   
-        } else {
-
         }
       
       
@@ -1911,10 +1971,6 @@ extension EditorView: PhotosDelegate, MaskViewDelegate {
     func MaskViewOff() {
         if activeImage != nil {
             activeImage!.mask = nil
-         
-            
-
-            
         }
         
     }
@@ -1986,6 +2042,7 @@ extension EditorView: shapeDelegate{
         self.LayersViews.collectionView.reloadData()
         
         addGestures(view: imageView, tag: 1)
+        
     }
     
     
@@ -2019,6 +2076,43 @@ extension EditorView: shapeDelegate{
     }
     
 }
+
+
+
+extension EditorView {
+    
+    func showDrwing(){
+        
+        let TouchDrawViews = TouchDrawView()
+      
+        
+        isDrawing = true
+        DoneButton.isHidden = false
+      
+        hideToolbar(hide: true)
+        self.DrwingTool.isHidden = false
+        
+        self.DrwingTool.UndoButton.isEnabled = false
+        self.DrwingTool.RedoButton.isEnabled = false
+        self.DrwingTool.cleaningButton.isEnabled = false
+        
+        self.EdeiterViewHeight.constant = 70
+        self.panGesture.isEnabled = false
+        self.pinchGesture.isEnabled = false
+        self.rotationGesture.isEnabled = false
+        TouchDrawViews.frame.size = CGSize(width: self.tempImageView.frame.size.width, height: self.tempImageView.frame.size.height)
+        TouchDrawViews.backgroundColor = .clear
+        self.tempImageView.addSubview(TouchDrawViews)
+        self.DrwingTool.drawView = TouchDrawViews
+        self.DrwingTool.drawViewdelegate()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: {finished in })
+        
+        
+    }
+}
+
 
 
 extension EditorView: colorDelegate {
@@ -2270,5 +2364,59 @@ extension CGAffineTransform {
     var scaleY: CGFloat {
         let angle = self.angle
         return self.d * cos(angle) + self.b * sin(angle)
+    }
+}
+
+
+
+
+extension UIImage {
+    
+    func cropAlpha() -> UIImage {
+        
+        let cgImage = self.cgImage!;
+        
+        let width = cgImage.width
+        let height = cgImage.height
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bytesPerPixel:Int = 4
+        let bytesPerRow = bytesPerPixel * width
+        let bitsPerComponent = 8
+        let bitmapInfo: UInt32 = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
+        
+        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo),
+            let ptr = context.data?.assumingMemoryBound(to: UInt8.self) else {
+                return self
+        }
+        
+        context.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        var minX = width
+        var minY = height
+        var maxX: Int = 0
+        var maxY: Int = 0
+        
+        for x in 1 ..< width {
+            for y in 1 ..< height {
+                
+                let i = bytesPerRow * Int(y) + bytesPerPixel * Int(x)
+                let a = CGFloat(ptr[i + 3]) / 255.0
+                
+                if(a>0) {
+                    if (x < minX) { minX = x };
+                    if (x > maxX) { maxX = x };
+                    if (y < minY) { minY = y};
+                    if (y > maxY) { maxY = y};
+                }
+            }
+        }
+        
+        let rect = CGRect(x: CGFloat(minX),y: CGFloat(minY), width: CGFloat(maxX-minX), height: CGFloat(maxY-minY))
+        let imageScale:CGFloat = self.scale
+        let croppedImage =  self.cgImage!.cropping(to: rect)!
+        let ret = UIImage(cgImage: croppedImage, scale: imageScale, orientation: self.imageOrientation)
+        
+        return ret;
     }
 }

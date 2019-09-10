@@ -256,6 +256,7 @@ class colorCell: UICollectionViewCell {
 
 // ARRAY OF COLORS
 var colorsArray = [
+    UIColor.black,
     UIColor(red: 0.9059, green: 0.298, blue: 0.2353, alpha: 1.0),
     UIColor(red: 0.7529, green: 0.2235, blue: 0.1686, alpha: 1.0),
     UIColor(red: 0.902, green: 0.4941, blue: 0.1333, alpha: 1.0),

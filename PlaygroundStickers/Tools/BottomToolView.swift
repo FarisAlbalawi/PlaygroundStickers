@@ -19,7 +19,7 @@ class BottomToolView: UIView {
      var collectionView: UICollectionView!
      var BottomToolDelegate : BottomToolDelegate?
     
-    var bottomToolsArray = ["background","image","shapes","text","graphic", "emoji","snap","clearAll"]
+    var bottomToolsArray = ["background","image","shapes","text","graphic", "emoji","snap","drwing","clearAll"]
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

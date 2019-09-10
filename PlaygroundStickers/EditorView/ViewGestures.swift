@@ -30,17 +30,19 @@ extension EditorView: UIGestureRecognizerDelegate {
     }
 
     
-    //Translation is moving object
-    @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+     //Translation is moving object
+    @objc func panGesture(recognizer : UIPanGestureRecognizer) {
         if lastView != nil {
             let viewIndex = tempImageView.subviews.firstIndex(of: lastView!)
             moveView(view: lastView!, index: viewIndex!, recognizer: recognizer)
         }
-     
     }
     
+   
+
     
-    @objc func pinchGesture(_ recognizer: UIPinchGestureRecognizer) {
+    
+    @objc func pinchGesture(recognizer: UIPinchGestureRecognizer) {
         if lastView != nil {
             let maxScale : CGFloat  = 3.0;
             let minScale : CGFloat  = 0.1;
@@ -79,7 +81,7 @@ extension EditorView: UIGestureRecognizerDelegate {
     }
     
     
-    @objc func rotationGesture(_ recognizer: UIRotationGestureRecognizer) {
+    @objc func rotationGesture(recognizer: UIRotationGestureRecognizer) {
         if lastView != nil {
             lastView!.transform = lastView!.transform.rotated(by: recognizer.rotation)
             recognizer.rotation = 0
@@ -93,13 +95,13 @@ extension EditorView: UIGestureRecognizerDelegate {
     @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
             scaleEffect(view: view)
+            
         }
     }
     
     @objc func tapGesture(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
              lastView = view
-        
             if #available(iOS 10.0, *) {
                 let generator = UIImpactFeedbackGenerator(style: .heavy)
                 generator.impactOccurred()
