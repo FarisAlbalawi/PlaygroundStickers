@@ -782,6 +782,7 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
     
     
     func spaceValueChanged(value: CGFloat, type: Bool) {
+        let color = self.activeTextView!.textColor
         if type == true {
             activeTextView?.addCharacterSpacing(value)
           
@@ -796,6 +797,8 @@ shadowToolsDelegate, textBackgroundToolDelegate, TextBackgroundViewDelegate, cor
         self.activeTextView!.isScrollEnabled = true
         let font = UIFont(name: self.activeTextView!.font!.fontName, size: self.activeTextView!.font!.pointSize)
         self.activeTextView!.font = font
+        self.activeTextView!.textColor = color
+        
         
         let sizeToFit = self.activeTextView!.sizeThatFits(CGSize(width: UIScreen.main.bounds.size.width,
                                                                  height:CGFloat.greatestFiniteMagnitude))
