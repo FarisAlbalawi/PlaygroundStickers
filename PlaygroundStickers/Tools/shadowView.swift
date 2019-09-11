@@ -242,12 +242,16 @@ class shadowView: UIView {
     }
     
     
-    func setLastshadow(shadowOffsetWidth: Double, shadowOffsetHeight: Double, shadowOpacity: Double, shadowRadius: Double ) {
+    func setLastshadow(shadowOffsetWidth: CGFloat, shadowOffsetHeight: CGFloat, shadowOpacity: Float, shadowRadius: CGFloat ) {
         
         self.shadowOffsetWidth.setValue(Float(shadowOffsetWidth), animated:true)
         self.shadowOffsetHeight.setValue(Float(shadowOffsetHeight), animated:true)
         self.shadowOpacity.setValue(Float(shadowOpacity), animated:true)
         self.shadowRadius.setValue(Float(shadowRadius), animated:true)
+        self.labWidth.text = "\(round(shadowOffsetWidth * 100))%"
+        self.labHeight.text = "\(round(shadowOffsetHeight * 100))%"
+        self.labRadius.text = "\(round(shadowRadius * 100))%"
+        self.labOpacity.text = "\(round(shadowOpacity * 100))%"
     }
     
     

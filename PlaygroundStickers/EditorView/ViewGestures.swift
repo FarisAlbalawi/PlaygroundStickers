@@ -95,6 +95,14 @@ extension EditorView: UIGestureRecognizerDelegate {
     @objc func doubleTap(_ recognizer: UITapGestureRecognizer) {
         if let view = recognizer.view {
             scaleEffect(view: view)
+            let shadowOffsetWidth = view.layer.shadowOffset.width
+            let shadowOffsetHeight = view.layer.shadowOffset.height
+            let shadowOpacity = view.layer.shadowOpacity
+            let shadowRadius = view.layer.shadowRadius
+            
+            self.shadowViews.setLastshadow(shadowOffsetWidth: shadowOffsetWidth, shadowOffsetHeight: shadowOffsetHeight, shadowOpacity: shadowOpacity, shadowRadius: shadowRadius)
+            
+            
             
         }
     }

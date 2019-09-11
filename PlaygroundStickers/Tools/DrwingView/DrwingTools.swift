@@ -17,7 +17,7 @@ class DrwingTools: UIView, TouchDrawViewDelegate {
   
     var drawView: TouchDrawView?
 
-    private static let deltaWidth = CGFloat(2.0)
+    private static let deltaWidth = CGFloat(5.0)
 
     
     private let headerView: UIView = {
@@ -84,7 +84,7 @@ class DrwingTools: UIView, TouchDrawViewDelegate {
         sizeSlider.minimumValue = 1
         sizeSlider.thumbTintColor = UIColor.black
         
-        sizeSlider.setValue(1.0, animated:true)
+        sizeSlider.setValue(5.0, animated:true)
         sizeSlider.minimumTrackTintColor = topColor
         sizeSlider.maximumTrackTintColor = topColor
       
@@ -153,6 +153,9 @@ class DrwingTools: UIView, TouchDrawViewDelegate {
             drawView!.delegate = self
             drawView!.setWidth(DrwingTools.deltaWidth)
         }
+        
+        sizeSlider.setValue(5.0, animated:true)
+        self.collectionView.reloadData()
     }
     
     //initWithCode to init view from xib or storyboard

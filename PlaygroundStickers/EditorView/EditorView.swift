@@ -581,13 +581,16 @@ class EditorView: UIViewController {
         
         if isDrawing {
             
+            let t = self.DrwingTool.drawView!.transform
             let imge = self.DrwingTool.drawView!.toImage()
             let image = imge.cropAlpha()
+            
             let heightInPoints = image.size.height
            
             let widthInPoints = image.size.width
            
             let imageView = UIImageView()
+            imageView.transform = t
             imageView.image = image
             imageView.frame.size = CGSize(width: widthInPoints, height: heightInPoints)
             imageView.center = tempImageView.center
@@ -702,7 +705,10 @@ class EditorView: UIViewController {
         self.DoneButton.isHidden = false
         hideToolbar(hide: true)
         
+
+        
         activeTextView = text
+      
         self.tempImageView.isUserInteractionEnabled = false
         TextTools.isHidden = false
         self.DoneButton.isHidden = false
@@ -721,13 +727,16 @@ class EditorView: UIViewController {
             self.FiltersView.collectionView.reloadData()
             self.TextTools.isHidden = true
             self.shapeTools.isHidden = true
-            
+          
         } else if tag == 1 {
             self.activeImage = Image
             self.shapeTools.isHidden = false
             self.FiltersView.isHidden = true
             self.imageTool.isHidden = true
             self.TextTools.isHidden = true
+            
+          
+            
         } else if tag == 3 {
           
         }
@@ -1704,12 +1713,14 @@ extension EditorView: UITextViewDelegate, FontViewDelegate {
     }
     public func textViewDidBeginEditing(_ textView: UITextView) {
       
-        textView.frame = CGRect(x: 0, y: tempImageView.center.y,
-        width: UIScreen.main.bounds.width, height: textView.frame.height)
         lastTextViewTransform =  textView.transform
         lastTextViewTransCenter = textView.center
         lastTextViewFont = textView.font!
         activeTextView = textView
+        
+        textView.frame = CGRect(x: 0, y: tempImageView.center.y,
+                                width: UIScreen.main.bounds.width, height: textView.frame.height)
+        
         self.textIndex = tempImageView.subviews.firstIndex(of: textView)
         textView.superview?.bringSubviewToFront(textView)
         textView.font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize)
@@ -1749,6 +1760,14 @@ extension EditorView: UITextViewDelegate, FontViewDelegate {
            
         }
     
+        textView.font = self.lastTextViewFont!
+        UIView.animate(withDuration: 0.3,
+                       animations: {
+                        textView.transform = self.lastTextViewTransform!
+                        textView.center = self.lastTextViewTransCenter!
+        }, completion: nil)
+        
+        
         textView.isScrollEnabled = true
         let font = UIFont(name: textView.font!.fontName, size: textView.font!.pointSize)
        textView.font = font
@@ -1762,12 +1781,7 @@ extension EditorView: UITextViewDelegate, FontViewDelegate {
         textView.setNeedsDisplay()
         textView.isScrollEnabled = false
      
-        UIView.animate(withDuration: 0.3,
-                       animations: {
-                        textView.transform = self.lastTextViewTransform!
-                        textView.center = self.lastTextViewTransCenter!
-        }, completion: nil)
-        
+  
     
     }
     
@@ -2035,6 +2049,7 @@ extension EditorView: PhotosDelegate, MaskViewDelegate {
 extension EditorView: shapeDelegate{
     func shapeTapped(image: UIImage) {
         self.removeshapesView()
+   
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
         imageView.frame.size = CGSize(width: 150, height: 150)
@@ -2376,53 +2391,3 @@ extension CGAffineTransform {
 
 
 
-extension UIImage {
-    
-    func cropAlpha() -> UIImage {
-        
-        let cgImage = self.cgImage!;
-        
-        let width = cgImage.width
-        let height = cgImage.height
-        
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bytesPerPixel:Int = 4
-        let bytesPerRow = bytesPerPixel * width
-        let bitsPerComponent = 8
-        let bitmapInfo: UInt32 = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
-        
-        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo),
-            let ptr = context.data?.assumingMemoryBound(to: UInt8.self) else {
-                return self
-        }
-        
-        context.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
-        var minX = width
-        var minY = height
-        var maxX: Int = 0
-        var maxY: Int = 0
-        
-        for x in 1 ..< width {
-            for y in 1 ..< height {
-                
-                let i = bytesPerRow * Int(y) + bytesPerPixel * Int(x)
-                let a = CGFloat(ptr[i + 3]) / 255.0
-                
-                if(a>0) {
-                    if (x < minX) { minX = x };
-                    if (x > maxX) { maxX = x };
-                    if (y < minY) { minY = y};
-                    if (y > maxY) { maxY = y};
-                }
-            }
-        }
-        
-        let rect = CGRect(x: CGFloat(minX),y: CGFloat(minY), width: CGFloat(maxX-minX), height: CGFloat(maxY-minY))
-        let imageScale:CGFloat = self.scale
-        let croppedImage =  self.cgImage!.cropping(to: rect)!
-        let ret = UIImage(cgImage: croppedImage, scale: imageScale, orientation: self.imageOrientation)
-        
-        return ret;
-    }
-}
